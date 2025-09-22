@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HomeMaster Direct Dashboard</title>
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="logo-section">
+      <img src="logo.png" alt="Logo" class="logo">
+      <div>
+        <h2>HomeMaster Direct</h2>
+        <p>Home Master Marketing</p>
+      </div>
+    </div>
+    <div class="user-section">
+      <span class="user-role">
+        <span class="circle"></span> admin <br><small>Manager</small>
+      </span>
+      <button onclick="signOut()">Sign Out</button>
+    </div>
+  </header>
+
+  <!-- Tabs -->
+  <nav class="tabs">
+    <a href="#" class="active">Inventory</a>
+    <a href="#">Sales</a>
+    <a href="#">Reports</a>
+  </nav>
+
+  <!-- Stats -->
+  <section class="stats">
+    <div class="card">
+      <h3 id="totalProducts">0</h3>
+      <p>Total Products</p>
+    </div>
+    <div class="card low">
+      <h3 id="lowStock">0</h3>
+      <p>Low Stock</p>
+    </div>
+    </div>
+    <div class="card">
+      <h3 id="categoriesCount">0</h3>
+      <p>Categories</p>
+    </div>
+  </section>
+
+  <!-- Products -->
+  <section class="products">
+    <div class="products-header">
+      <h3>Products</h3>
+      <button class="add-btn" onclick="openModal()">Add Product</button>
+    </div>
+    <div class="search-bar">
+      <form id="searachForm">
+        <input type="search" id="searchInput" placeholder="Search products...">
+        <button type="submit">Search</button> 
+      </form>
+      <select id="categoryFilter">
+        <option value="">All Categories</option>
+        <option value="Electronics">Electronics</option>
+        <option value="Furniture">Furniture</option>
+        <option value="Appliances">Appliances</option>
+        <option value="Clothing">Clothing</option>
+        <option value="Books">Books</option>
+        <option value="Other">Other</option>
+      </select>
+    </div>
+
+    <!-- Table -->
+    <table id="productsTable">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Code</th>
+          <th>Category</th>
+          <th>Stock</th>
+          <th>Price</th>
+          <th>Status</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td colspan="7" class="empty">No products found.</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Modal -->
+  <div id="productModal" class="modal">
+    <div class="modal-content">
+  <h2 id="modalTitle">Add Product</h2>
+      <form id="productForm">
+        <label>Product Name</label>
+        <input type="text" id="productName" required>
+
+        <label>Code</label>
+  <input type="text" id="code" required>
+
+        <label>Category</label>
+    <select id="category" required>
+      <option value="">Select Category</option>
+      <option value="Electronics">Electronics</option>
+      <option value="Furniture">Furniture</option>
+      <option value="Appliances">Appliances</option>
+      <option value="Clothing">Clothing</option>
+      <option value="Books">Books</option>
+      <option value="Other">Other</option>
+    </select>
+
+        <label>Stock</label>
+        <input type="number" id="stock" required>
+
+        <label>Price</label>
+        <input type="number" id="price" required>
+
+        <div class="modal-actions">
+          <button type="button" onclick="closeModal()">Cancel</button>
+          <button type="submit" id="submitBtn">Add</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>
