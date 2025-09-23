@@ -63,7 +63,7 @@ form.addEventListener("submit", function(e) {
       <td>${category}</td>
       <td>${stock}</td>
       <td>₱${price.toFixed(2)}</td>
-      <td>${stock > 0 ? "In Stock" : "Out of Stock"}</td>
+      <td class="${stock <= 10 ? 'low-stock' : ''}">${stock <= 10 ? "Low Stock" : (stock > 0 ? "In Stock" : "Out of Stock")}</td>
       <td>
         <button onclick="editRow(this)">Edit</button>
         <button onclick="deleteRow(this)">Delete</button>
@@ -77,7 +77,7 @@ form.addEventListener("submit", function(e) {
       <td>${category}</td>
       <td>${stock}</td>
       <td>₱${price.toFixed(2)}</td>
-      <td>${stock > 0 ? "In Stock" : "Out of Stock"}</td>
+      <td class="${stock <= 10 ? 'low-stock' : ''}">${stock <= 10 ? "Low Stock" : (stock > 0 ? "In Stock" : "Out of Stock")}</td>
       <td>
         <button onclick="editRow(this)">Edit</button>
         <button onclick="deleteRow(this)">Delete</button>
@@ -127,6 +127,48 @@ categoryFilter.addEventListener("change", filterProducts);
   updateStats();
 });
 
+// --- Search Products ---
+const searchInput = document.getElementById("searchInput");
+const searchForm = document.getElementById("searachForm");
+
+searchForm.addEventListener("submit", function(e) {
+  e.preventDefault();
+  searchProducts();
+});
+
+searchInput.addEventListener("input", function() {
+  searchProducts();
+});
+
+function searchProducts() {
+  const query = searchInput.value.trim().toLowerCase();
+  const rows = tableBody.querySelectorAll("tr");
+  let anyVisible = false;
+  rows.forEach(row => {
+    if (row.classList.contains("empty")) return;
+    const name = row.cells[0].textContent.toLowerCase();
+    const sku = row.cells[1].textContent.toLowerCase();
+    const category = row.cells[2].textContent.toLowerCase();
+    if (!query || name.includes(query) || sku.includes(query) || category.includes(query)) {
+      row.style.display = "";
+      anyVisible = true;
+    } else {
+      row.style.display = "none";
+    }
+  });
+  // Remove empty message if there are visible items
+  const emptyRow = tableBody.querySelector(".empty");
+  if (anyVisible) {
+    if (emptyRow) emptyRow.parentElement.remove();
+  } else {
+    if (!emptyRow) {
+      const tr = document.createElement("tr");
+      tr.innerHTML = '<td colspan="7" class="empty">No products found.</td>';
+      tableBody.appendChild(tr);
+    }
+  }
+}
+
 // Edit product
 function editRow(button) {
   const row = button.closest("tr");
@@ -161,7 +203,7 @@ function updateStats() {
       const price = parseFloat(row.cells[4].textContent.replace("₱",""));
       const category = row.cells[2].textContent;
 
-      if (stock < 5) lowStock++;
+      if (stock <= 10) lowStock++;
       inventoryValue += stock * price;
       categories.add(category);
     }
