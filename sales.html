@@ -1,58 +1,56 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Sales - HomeMaster</title>
-  <link rel="stylesheet" href="sales.css">
-  <link rel="stylesheet" href="shared.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sales - HomeMaster Direct</title>
+  <link rel="stylesheet" href="dashboard.css">
 </head>
 <body>
+  <!-- Navbar -->
   <header class="navbar">
     <div class="logo-section">
-      <img src="logo.png" class="logo">
+      <img src="logo.png" alt="Logo" class="logo">
       <div>
         <h2>HomeMaster Direct</h2>
-        <p class="muted">Home Master Marketing</p>
+        <p>Home Master Marketing</p>
       </div>
     </div>
     <div class="user-section">
-      <div class="user-role"><span class="circle"></span> admin <small>Manager</small></div>
-      <a class="btn-outline" href="index.html">Sign Out</a>
+      <span class="user-role">
+        <span class="circle"></span> admin <br><small>Manager</small>
+      </span>
+      <button onclick="signOut()">Sign Out</button>
     </div>
   </header>
 
+  <!-- Tabs -->
   <nav class="tabs">
     <a href="dashboard.html">Inventory</a>
     <a href="sales.html" class="active">Sales</a>
-    <a href="reports.html">Reports</a>
+    <a href="#">Reports</a>
   </nav>
 
-  <main class="page-wrap two-col">
-    <section class="panel">
-      <div class="panel-header"><h3>Select Products</h3></div>
-      <div class="panel-body">
-        <input id="salesSearch" class="full-input" placeholder="Search products...">
-        <div id="productList" class="list-empty muted">Loading products...</div>
+  <!-- Sales Section -->
+  <section class="sales">
+    <div class="sales-left">
+      <h3>Select Products</h3>
+      <div class="search-bar">
+        <input type="text" id="searchProducts" placeholder="Search products...">
       </div>
-    </section>
+      <div id="productsList" class="products-list"></div>
+    </div>
 
-    <aside class="panel">
-      <div class="panel-header"><h3>Cart (<span id="cartCount">0</span> items)</h3></div>
-      <div class="panel-body">
-        <div id="cartList" class="list-empty muted">Cart is empty</div>
-        <div id="cartFooter" class="cart-footer hidden">
-          <div>Total: <strong id="cartTotal">₱0.00</strong></div>
-          <div class="stack" style="margin-top:10px">
-            <button id="checkoutBtn" class="btn-dark">Checkout</button>
-            <button id="clearCart" class="btn-outline">Clear Cart</button>
-          </div>
-        </div>
+    <div class="sales-right">
+      <h3>Cart (<span id="cartCount">0</span> items)</h3>
+      <div id="cartItems" class="cart-items">Cart is empty</div>
+      <div class="cart-footer">
+        <strong>Total: ₱<span id="cartTotal">0.00</span></strong>
+        <button onclick="checkout()" id="checkoutBtn" disabled>Checkout</button>
       </div>
-    </aside>
-  </main>
+    </div>
+  </section>
 
-  <script src="utils.js"></script>
   <script src="sales.js"></script>
 </body>
 </html>

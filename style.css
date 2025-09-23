@@ -1,3 +1,69 @@
+.forget-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 15px;
+}
+.checkbox-remember {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  white-space: nowrap;
+}
+input[type="checkbox"] {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  accent-color: #060214;
+  margin-right: 0;
+}
+.btn-reset {
+  display: inline-block;
+  width: 96%;
+  padding: 10px;
+  background-color: #060214;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 15px;
+  text-align: center;
+  margin-bottom: 15px;
+  transition: background 0.2s;
+}
+.btn-reset:hover {
+  background-color: #1a1a3d;
+}
+.btn-link {
+  display: inline-block;
+  width: 91%;
+  padding: 10px;
+  background-color: #060214;
+  color: #fff !important;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 15px;
+  text-align: center;
+  text-decoration: none;
+  font-weight: normal;
+  margin-bottom: 15px;
+}
+.btn-link:hover {
+  background-color: #1a1a3d;
+  text-decoration: none;
+}
+.checkbox-remember {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 14px;
+  white-space: nowrap;
+}
+/* Only keep necessary styles for buttons and layout */
 body {
   font-family: Arial, sans-serif;
   background-color: #ffffff;
@@ -84,3 +150,37 @@ button {
 button:hover {
   background-color: #1a1a3d;
 }
+/* Forgot password section */
+#forgotPasswordSection {
+  text-align: left;
+}
+
+#forgotPasswordSection h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Links (forgot / register) */
+.forget {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+}
+
+.forget a, .register a {
+  color: #060214;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.forget a:hover, .register a:hover {
+  text-decoration: underline;
+}
+
+.register {
+  text-align: center;
+  font-size: 13px;
+  margin-top: 10px;
+}
+

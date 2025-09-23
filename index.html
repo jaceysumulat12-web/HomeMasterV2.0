@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HomeMaster Direct</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HomeMaster Direct</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
@@ -15,18 +15,48 @@
       <p class="subtitle">Smart Hardware Management System</p>
     </div>
 
-    <!-- Login Form -->
+    <!-- Login Box -->
     <div class="login-box">
-      <h2>Sign In</h2>
-      <form id="loginForm">
-        <label for="username">Username</label>
-        <input type="text" id="username" placeholder="Enter Username" required>
+      <!-- Login Section -->
+      <div id="loginSection">
+        <h2>Sign In</h2>
+        <form id="loginForm">
+          <label for="username">Username</label>
+          <input type="text" id="username" placeholder="Enter Username" required>
 
-        <label for="password">Password</label>
-        <input type="password" id="password" placeholder="Enter Password" required>
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="Enter Password" required>
 
-        <button type="submit">Sign In</button>
-      </form>
+          <div class="forget">
+            <div class="forget-row">
+              <div class="checkbox-remember">
+                <input type="checkbox" id="rememberMe">
+                <span>Remember</span>
+              </div>
+              <a href="#" id="forgotPasswordLink">Forgot Password?</a>
+            </div>
+          </div>
+
+          <button type="submit">Sign In</button>
+        </form>
+
+        <div class="register">
+          <p>I don't have an account <a href="register.html">Register</a></p>
+        </div>
+      </div>
+
+      <!-- Forgot Password Section -->
+      <div id="forgotPasswordSection" style="display: none;">
+        <h2>Reset Password</h2>
+        <label for="resetUsername">Username or Email</label>
+        <input type="text" id="resetUsername" placeholder="Enter your username/email" required>
+
+        <label for="newPassword">New Password</label>
+        <input type="password" id="newPassword" placeholder="Enter new password" required>
+
+  <button id="resetPasswordBtn" class="btn-reset">Reset Password</button>
+  <p><a href="#" id="backToLogin" class="btn-link">Back to Login</a></p>
+      </div>
     </div>
   </div>
 

@@ -1,141 +1,156 @@
-// sales page logic
-document.addEventListener('DOMContentLoaded', ()=>{
-  const productList = document.getElementById('productList');
-  const cartList = document.getElementById('cartList');
-  const cartCount = document.getElementById('cartCount');
-  const cartFooter = document.getElementById('cartFooter');
-  const cartTotalEl = document.getElementById('cartTotal');
-  const salesSearch = document.getElementById('salesSearch');
-  const checkoutBtn = document.getElementById('checkoutBtn');
-  const clearCart = document.getElementById('clearCart');
+function signOut() {
+  alert("Signed out successfully!");
+  window.location.href = "index.html";
+}
 
-  function renderProducts(filter=''){
-    const products = readProducts();
-    productList.innerHTML = '';
-    const shown = products.filter(p=>{
-      const q = (filter||'').toLowerCase();
-      return !q || p.name.toLowerCase().includes(q) || p.sku.toLowerCase().includes(q) || (p.category||'').toLowerCase().includes(q);
-    });
+// Load products from localStorage
+let products = JSON.parse(localStorage.getItem("products")) || [];
+let cart = [];
 
-    if(shown.length === 0){
-      productList.classList.add('list-empty');
-      productList.textContent = 'No products available';
-      return;
-    }
-    productList.classList.remove('list-empty');
+// Render products
+function renderProducts(filter = "") {
+  const list = document.getElementById("productsList");
+  list.innerHTML = "";
 
-    shown.forEach((p, idx)=>{
-      const el = document.createElement('div');
-      el.className = 'sale-item';
-      el.style.display='flex'; el.style.justifyContent='space-between'; el.style.alignItems='center';
-      el.style.padding='8px 4px'; el.style.borderBottom='1px dashed #f1f1f1';
-      el.innerHTML = `<div>
-                        <div><strong>${p.name}</strong> <span class="muted">(${p.sku})</span></div>
-                        <div class="muted">${p.category} • Stock: ${p.stock} • ₱${Number(p.price).toFixed(2)}</div>
-                      </div>
-                      <div>
-                        <button class="btn-dark add" data-idx="${idx}">Add</button>
-                      </div>`;
-      productList.appendChild(el);
-    });
+  const filtered = products.filter(p =>
+    p.name.toLowerCase().includes(filter.toLowerCase()) ||
+    p.code.toLowerCase().includes(filter.toLowerCase())
+  );
 
-    productList.querySelectorAll('.add').forEach(b=>{
-      b.addEventListener('click', ()=>{
-        addToCart(Number(b.getAttribute('data-idx')));
-      });
-    });
+  if (filtered.length === 0) {
+    list.innerHTML = "<p style='text-align:center;color:#666;'>No products found</p>";
+    return;
   }
 
-  function addToCart(idx){
-    const products = readProducts();
-    const p = products[idx];
-    if(!p) return;
-    const cart = readCart();
-    const existing = cart.find(c=>c.sku === p.sku);
-    if(existing){
-      if(existing.qty >= p.stock){
-        alert('Not enough stock');
-        return;
-      }
+  filtered.forEach(p => {
+    const div = document.createElement("div");
+    div.classList.add("product-item");
+    div.innerHTML = `
+      <div>
+        <strong>${p.name}</strong><br>
+        <small>${p.code} - Stock: ${p.stock}</small>
+      </div>
+      <span>₱${p.price.toFixed(2)}</span>
+    `;
+    div.onclick = () => addToCart(p);
+    list.appendChild(div);
+  });
+}
+
+// Add to cart
+function addToCart(product) {
+  const existing = cart.find(c => c.code === product.code);
+  if (existing) {
+    if (existing.qty < product.stock) {
       existing.qty++;
     } else {
-      cart.push({ ...p, qty: 1 });
-    }
-    writeCart(cart);
-    renderCart();
-  }
-
-  function renderCart(){
-    const cart = readCart();
-    if(cart.length === 0){
-      cartList.classList.add('list-empty');
-      cartList.textContent = 'Cart is empty';
-      cartFooter.classList.add('hidden');
-      cartCount.textContent = '0';
-      cartTotalEl.textContent = '₱0.00';
+      alert("No more stock available for " + product.name);
       return;
     }
-    cartList.classList.remove('list-empty');
-    cartList.innerHTML = '';
-    let total = 0;
-    cart.forEach((c, i)=>{
-      total += Number(c.price) * c.qty;
-      const item = document.createElement('div');
-      item.style.display='flex'; item.style.justifyContent='space-between'; item.style.alignItems='center';
-      item.style.padding='6px 0';
-      item.innerHTML = `<div><strong>${c.name}</strong> <div class="muted">₱${Number(c.price).toFixed(2)} x ${c.qty}</div></div>
-                        <div>
-                          <button class="btn-outline dec" data-i="${i}">-</button>
-                          <button class="btn-outline inc" data-i="${i}">+</button>
-                          <button class="btn-outline del" data-i="${i}">Remove</button>
-                        </div>`;
-      cartList.appendChild(item);
+  } else {
+    cart.push({ ...product, qty: 1 });
+  }
+  renderCart();
+}
+
+// Render cart with controls
+function renderCart() {
+  const cartDiv = document.getElementById("cartItems");
+  cartDiv.innerHTML = "";
+  if (cart.length === 0) {
+    cartDiv.textContent = "Cart is empty";
+    document.getElementById("checkoutBtn").disabled = true;
+  } else {
+    cart.forEach((item, index) => {
+      const div = document.createElement("div");
+      div.classList.add("cart-item");
+      div.innerHTML = `
+        <span>${item.name}</span>
+        <div>
+          <button onclick="decreaseQty(${index})">-</button>
+          <span> ${item.qty} </span>
+          <button onclick="increaseQty(${index})">+</button>
+          <span>₱${(item.qty * item.price).toFixed(2)}</span>
+          <button onclick="removeFromCart(${index})">x</button>
+        </div>
+      `;
+      cartDiv.appendChild(div);
     });
+    document.getElementById("checkoutBtn").disabled = false;
+  }
+  document.getElementById("cartCount").textContent = cart.length;
+  document.getElementById("cartTotal").textContent = cart.reduce((sum, i) => sum + i.qty * i.price, 0).toFixed(2);
+}
 
-    cartFooter.classList.remove('hidden');
-    cartCount.textContent = cart.reduce((s,c)=>s+c.qty,0);
-    cartTotalEl.textContent = '₱' + total.toFixed(2);
+// Cart functions
+function increaseQty(index) {
+  const item = cart[index];
+  const product = products.find(p => p.code === item.code);
+  if (item.qty < product.stock) {
+    item.qty++;
+    renderCart();
+  } else {
+    alert("No more stock available for " + item.name);
+  }
+}
 
-    // attach buttons
-    cartList.querySelectorAll('.inc').forEach(b=> b.addEventListener('click', ()=>{
-      const i = Number(b.dataset.i); const cart = readCart(); const p = readProducts().find(x=>x.sku===cart[i].sku);
-      if(cart[i].qty < (p ? p.stock : 9999)){ cart[i].qty++; writeCart(cart); renderCart(); } else alert('Not enough stock');
-    }));
-    cartList.querySelectorAll('.dec').forEach(b=> b.addEventListener('click', ()=>{
-      const i = Number(b.dataset.i); const cart = readCart();
-      if(cart[i].qty > 1){ cart[i].qty--; writeCart(cart); renderCart(); } else { cart.splice(i,1); writeCart(cart); renderCart();}
-    }));
-    cartList.querySelectorAll('.del').forEach(b=> b.addEventListener('click', ()=>{
-      const i = Number(b.dataset.i); const cart = readCart();
-      cart.splice(i,1); writeCart(cart); renderCart();
-    }));
+function decreaseQty(index) {
+  if (cart[index].qty > 1) {
+    cart[index].qty--;
+  } else {
+    cart.splice(index, 1);
+  }
+  renderCart();
+}
+
+function removeFromCart(index) {
+  cart.splice(index, 1);
+  renderCart();
+}
+
+// Checkout
+function checkout() {
+  if (cart.length === 0) return;
+
+  alert("Checkout complete! Total: ₱" + document.getElementById("cartTotal").textContent);
+
+  // Deduct stock
+  cart.forEach(item => {
+    const prod = products.find(p => p.code === item.code);
+    if (prod) prod.stock -= item.qty;
+  });
+
+  // Save updated products
+  localStorage.setItem("products", JSON.stringify(products));
+
+  // Update visible stock in product list
+  const list = document.getElementById("productsList").children;
+  for (let div of list) {
+    const code = div.querySelector("small").textContent.split(" - ")[0];
+    const prod = products.find(p => p.code === code);
+    if (prod) {
+      div.querySelector("small").textContent = `${prod.code} - Stock: ${prod.stock}`;
+    }
   }
 
-  checkoutBtn && checkoutBtn.addEventListener('click', ()=>{
-    const cart = readCart();
-    if(cart.length === 0) return alert('Cart is empty');
-    // reduce inventory stock
-    const products = readProducts();
-    cart.forEach(ci=>{
-      const p = products.find(x=>x.sku === ci.sku);
-      if(p) p.stock = Math.max(0, Number(p.stock) - Number(ci.qty));
-    });
-    writeProducts(products);
-    writeCart([]);
-    renderProducts(salesSearch.value);
-    renderCart();
-    updateDashboardFromStorage();
-    alert('Checkout success (demo). Inventory updated.');
-  });
-
-  clearCart && clearCart.addEventListener('click', ()=>{
-    if(confirm('Clear cart?')){ writeCart([]); renderCart(); }
-  });
-
-  salesSearch && salesSearch.addEventListener('input', ()=> renderProducts(salesSearch.value));
-
-  // initial
-  renderProducts();
+  // Clear cart
+  cart = [];
   renderCart();
-  updateDashboardFromStorage();
+}
+
+// Search
+document.getElementById("searchProducts").addEventListener("input", (e) => {
+  renderProducts(e.target.value);
 });
+
+// --- Sync with Inventory instantly ---
+window.addEventListener("storage", (event) => {
+  if (event.key === "products") {
+    products = JSON.parse(localStorage.getItem("products")) || [];
+    renderProducts();
+  }
+});
+
+// Init
+renderProducts();
+renderCart();

@@ -27,7 +27,7 @@
   <!-- Tabs -->
   <nav class="tabs">
     <a href="#" class="active">Inventory</a>
-    <a href="#">Sales</a>
+    <a href="sales.html">Sales</a>
     <a href="#">Reports</a>
   </nav>
 
@@ -40,7 +40,6 @@
     <div class="card low">
       <h3 id="lowStock">0</h3>
       <p>Low Stock</p>
-    </div>
     </div>
     <div class="card">
       <h3 id="categoriesCount">0</h3>
@@ -94,24 +93,24 @@
   <!-- Modal -->
   <div id="productModal" class="modal">
     <div class="modal-content">
-  <h2 id="modalTitle">Add Product</h2>
+      <h2 id="modalTitle">Add Product</h2>
       <form id="productForm">
         <label>Product Name</label>
         <input type="text" id="productName" required>
 
         <label>Code</label>
-  <input type="text" id="code" required>
+        <input type="text" id="code" required>
 
         <label>Category</label>
-    <select id="category" required>
-      <option value="">Select Category</option>
-      <option value="Tools">Tools</option>
-      <option value="Fasteners">Fasteners</option>
-      <option value="Home Goods">Home Goods</option>
-      <option value="Paint & Decoration">Paint & Decoration</option>
-      <option value="Safety Equipments">Safety Equipments</option>
-      <option value="Bathroom Materials">Bathroom Materials</option>
-    </select>
+        <select id="category" required>
+          <option value="">Select Category</option>
+          <option value="Tools">Tools</option>
+          <option value="Fasteners">Fasteners</option>
+          <option value="Home Goods">Home Goods</option>
+          <option value="Paint & Decoration">Paint & Decoration</option>
+          <option value="Safety Equipments">Safety Equipments</option>
+          <option value="Bathroom Materials">Bathroom Materials</option>
+        </select>
 
         <label>Stock</label>
         <input type="number" id="stock" required>
