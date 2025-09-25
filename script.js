@@ -14,7 +14,8 @@ document.getElementById("loginForm").addEventListener("submit", function(e) {
   }
 
   // Demo login check (replace with backend later)
-  if (username === "admin" && password === "admin123") {
+  const savedPassword = localStorage.getItem("userPassword_" + username);
+  if ((savedPassword && password === savedPassword) || (username === "admin" && password === "admin123" && !savedPassword)) {
     alert("Login successful!");
     window.location.href = "dashboard.html";
   } else {
@@ -55,6 +56,7 @@ document.getElementById("resetPasswordBtn").addEventListener("click", function()
   const newPass = document.getElementById("newPassword").value;
 
   if (resetUser && newPass) {
+    localStorage.setItem("userPassword_" + resetUser, newPass);
     alert("Password reset successful for: " + resetUser);
     forgotSection.style.display = "none";
     loginSection.style.display = "block";
