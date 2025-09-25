@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sales - HomeMaster Direct</title>
   <link rel="stylesheet" href="dashboard.css">
+  <link rel="website icon" type="png"
+  href="logo.png">
 </head>
 <body>
   <!-- Navbar -->
@@ -28,17 +30,19 @@
   <nav class="tabs">
     <a href="dashboard.html">Inventory</a>
     <a href="sales.html" class="active">Sales</a>
-    <a href="#">Reports</a>
+    <a href="reports.html">Reports</a>
   </nav>
 
   <!-- Sales Section -->
   <section class="sales">
+    <!-- Left: Products -->
     <div class="sales-left">
       <h3>Select Products</h3>
       <input type="text" id="searchProducts" placeholder="Search products...">
       <div id="productsList" class="products-list"></div>
     </div>
 
+    <!-- Right: Cart -->
     <div class="sales-right">
       <h3>Cart (<span id="cartCount">0</span> items)</h3>
       <div id="cartItems" class="cart-items">Cart is empty</div>

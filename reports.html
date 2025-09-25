@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reports - HomeMaster Direct</title>
+  <link rel="stylesheet" href="dashboard.css">
+  <link rel="website icon" type="png"
+  href="logo.png">
+</head>
+<body>
+  <!-- Navbar -->
+  <header class="navbar">
+    <div class="logo-section">
+      <img src="logo.png" alt="Logo" class="logo">
+      <div>
+        <h2>HomeMaster Direct</h2>
+        <p>Home Master Marketing</p>
+      </div>
+    </div>
+    <div class="user-section">
+      <span class="user-role">
+        <span class="circle"></span> admin <br><small>Manager</small>
+      </span>
+      <button onclick="signOut()">Sign Out</button>
+    </div>
+  </header>
+
+  <!-- Tabs -->
+  <nav class="tabs">
+    <a href="dashboard.html">Inventory</a>
+    <a href="sales.html">Sales</a>
+    <a href="reports.html" class="active">Reports</a>
+  </nav>
+
+  <!-- Report Stats -->
+  <section class="stats">
+    <div class="card">
+      <h3 id="totalSales">0</h3>
+      <p>Total Sales</p>
+    </div>
+    <div class="card">
+      <h3 id="totalRevenue">₱0.00</h3>
+      <p>Total Revenue</p>
+    </div>
+    <div class="card">
+      <h3 id="todaysSales">0</h3>
+      <p>Today's Sales</p>
+    </div>
+  </section>
+
+  <!-- Recent Sales -->
+  <section class="products">
+    <div class="products-header">
+      <h3>Recent Sales</h3>
+      <div>
+        <select id="timeFilter">
+          <option value="all">All Time</option>
+          <option value="today">Today</option>
+        </select>
+        <button id="downloadReportBtn">Download Daily Report</button>
+      </div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Sale ID</th>
+          <th>Date</th>
+          <th>Customer</th>
+          <th>Total</th>
+          <th>Payment</th>
+          <th>Cashier</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="salesTableBody">
+        <tr><td colspan="7" class="empty">No sales found.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Monthly Summary -->
+  <section class="products">
+    <div class="products-header">
+      <h3>Monthly Summary</h3>
+      <button id="downloadMonthlyBtn">Download Monthly Report</button>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Month</th>
+          <th>Total Sales</th>
+          <th>Total Revenue</th>
+          <th>Sales Dates</th>
+        </tr>
+      </thead>
+      <tbody id="monthlySummaryBody">
+        <tr><td colspan="4" class="empty">No sales found.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <script src="reports.js"></script>
+</body>
+</html>

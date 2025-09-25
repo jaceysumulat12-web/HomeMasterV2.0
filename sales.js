@@ -3,7 +3,7 @@ function signOut() {
   window.location.href = "index.html";
 }
 
-// Load products from localStorage
+// Load products
 let products = JSON.parse(localStorage.getItem("products")) || [];
 let cart = [];
 
@@ -53,7 +53,7 @@ function addToCart(product) {
   renderCart();
 }
 
-// Render cart with controls
+// Render cart
 function renderCart() {
   const cartDiv = document.getElementById("cartItems");
   cartDiv.innerHTML = "";
@@ -108,11 +108,99 @@ function removeFromCart(index) {
   renderCart();
 }
 
+// --- Printable Receipt ---
+function printReceipt(sale) {
+  let receiptWindow = window.open("", "PRINT", "height=600,width=400");
+
+  receiptWindow.document.write(`
+    <html>
+    <head>
+      <title>Receipt - ${sale.id}</title>
+      <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        h2, h3 { text-align: center; margin: 0; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border-bottom: 1px solid #ddd; padding: 8px; text-align: left; font-size: 14px; }
+        th { background: #f5f5f5; }
+        .total { font-weight: bold; }
+        .footer { text-align: center; margin-top: 20px; font-size: 12px; }
+      </style>
+    </head>
+    <body>
+      <h2>HomeMaster Direct</h2>
+      <h3>Official Receipt</h3>
+      <p><strong>Sale ID:</strong> ${sale.id}<br>
+         <strong>Date:</strong> ${sale.date}<br>
+         <strong>Cashier:</strong> ${sale.cashier}<br>
+         <strong>Customer:</strong> ${sale.customer}</p>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Qty</th>
+            <th>Price</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${sale.items.map(i => `
+            <tr>
+              <td>${i.name}</td>
+              <td>${i.qty}</td>
+              <td>₱${i.price.toFixed(2)}</td>
+              <td>₱${i.total.toFixed(2)}</td>
+            </tr>
+          `).join("")}
+          <tr class="total">
+            <td colspan="3">Grand Total</td>
+            <td>₱${sale.total.toFixed(2)}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="footer">
+        <p>Thank you for your purchase!<br>Powered by HomeMaster Direct</p>
+      </div>
+    </body>
+    </html>
+  `);
+
+  receiptWindow.document.close();
+  receiptWindow.focus();
+  receiptWindow.print();
+  receiptWindow.close();
+}
+
 // Checkout
 function checkout() {
   if (cart.length === 0) return;
 
-  alert("Checkout complete! Total: ₱" + document.getElementById("cartTotal").textContent);
+  const totalAmount = parseFloat(document.getElementById("cartTotal").textContent);
+  const date = new Date().toLocaleDateString();
+
+  const sale = {
+    id: "SALE-" + String(Date.now()).slice(-4),
+    date: date,
+    customer: "Walk-in",
+    items: cart.map(item => ({
+      name: item.name,
+      code: item.code,
+      qty: item.qty,
+      price: item.price,
+      total: item.qty * item.price
+    })),
+    total: totalAmount,
+    payment: "Cash",
+    cashier: "admin"
+  };
+
+  let salesReports = JSON.parse(localStorage.getItem("salesReports")) || [];
+  salesReports.push(sale);
+  localStorage.setItem("salesReports", JSON.stringify(salesReports));
+
+  // ✅ Print receipt
+  printReceipt(sale);
 
   // Deduct stock
   cart.forEach(item => {
@@ -120,10 +208,9 @@ function checkout() {
     if (prod) prod.stock -= item.qty;
   });
 
-  // Save updated products
   localStorage.setItem("products", JSON.stringify(products));
 
-  // Update visible stock in product list
+  // Update stock display
   const list = document.getElementById("productsList").children;
   for (let div of list) {
     const code = div.querySelector("small").textContent.split(" - ")[0];
@@ -133,7 +220,6 @@ function checkout() {
     }
   }
 
-  // Clear cart
   cart = [];
   renderCart();
 }
@@ -143,7 +229,7 @@ document.getElementById("searchProducts").addEventListener("input", (e) => {
   renderProducts(e.target.value);
 });
 
-// --- Sync with Inventory instantly ---
+// Sync with Inventory
 window.addEventListener("storage", (event) => {
   if (event.key === "products") {
     products = JSON.parse(localStorage.getItem("products")) || [];

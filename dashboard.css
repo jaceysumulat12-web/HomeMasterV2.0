@@ -333,3 +333,53 @@ th, td {
   justify-content: space-between;
   align-items: center;
 }
+/* Reports inner table */
+.inner-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  background: #fafafa;
+}
+
+.inner-table th, .inner-table td {
+  padding: 8px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+}
+
+.inner-table th {
+  background: #f0f0f0;
+}
+
+/* Download buttons */
+#downloadReportBtn,
+#downloadMonthlyBtn {
+  margin-left: 10px;
+  padding: 6px 12px;
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#downloadReportBtn:hover,
+#downloadMonthlyBtn:hover {
+  background: #0056b3;
+}
+/* Download buttons (Reports page) */
+#downloadReportBtn,
+#downloadMonthlyBtn {
+  background: #060214;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+#downloadReportBtn:hover,
+#downloadMonthlyBtn:hover {
+  background: #1a1a3d;
+}
