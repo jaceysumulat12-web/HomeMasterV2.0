@@ -137,15 +137,16 @@ function filterProducts() {
     }
   });
 
-  const emptyRow = tableBody.querySelector(".empty");
-  if (!anyVisible) {
-    if (!emptyRow) {
-      const tr = document.createElement("tr");
-      tr.innerHTML = '<td colspan="7" class="empty">No products found.</td>';
-      tableBody.appendChild(tr);
-    }
-  } else {
-    if (emptyRow) emptyRow.parentElement.remove();
+  // Remove all existing empty rows before checking
+  while (tableBody.querySelector(".empty")) {
+    tableBody.querySelector(".empty").remove();
+  }
+  // Only show 'No products found' if there are no non-empty rows visible
+  const visibleRows = Array.from(tableBody.querySelectorAll("tr")).filter(row => !row.classList.contains("empty") && row.style.display !== "none");
+  if (visibleRows.length === 0) {
+    const tr = document.createElement("tr");
+    tr.innerHTML = '<td colspan="7" class="empty">No products found.</td>';
+    tableBody.appendChild(tr);
   }
 }
 categoryFilter.addEventListener("change", filterProducts);
@@ -180,7 +181,7 @@ function searchProducts() {
   });
   const emptyRow = tableBody.querySelector(".empty");
   if (anyVisible) {
-    if (emptyRow) emptyRow.parentElement.remove();
+    if (emptyRow) emptyRow.remove();
   } else {
     if (!emptyRow) {
       const tr = document.createElement("tr");
@@ -202,10 +203,14 @@ function updateStats() {
     categories.add(p.category);
   });
 
-  document.getElementById("totalProducts").textContent = totalProducts;
-  document.getElementById("lowStock").textContent = lowStock;
-  document.getElementById("inventoryValue").textContent = "₱" + inventoryValue.toFixed(2);
-  document.getElementById("categoriesCount").textContent = categories.size;
+  const totalProductsEl = document.getElementById("totalProducts");
+  if (totalProductsEl) totalProductsEl.textContent = totalProducts;
+  const lowStockEl = document.getElementById("lowStock");
+  if (lowStockEl) lowStockEl.textContent = lowStock;
+  const inventoryValueEl = document.getElementById("inventoryValue");
+  if (inventoryValueEl) inventoryValueEl.textContent = "₱" + inventoryValue.toFixed(2);
+  const categoriesCountEl = document.getElementById("categoriesCount");
+  if (categoriesCountEl) categoriesCountEl.textContent = categories.size;
 }
 
 // --- Sync with Sales page instantly ---
