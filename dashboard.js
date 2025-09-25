@@ -44,7 +44,6 @@ function closeModal() {
   editingRow = null;
   modalTitle.textContent = "Add Product";
   submitBtn.textContent = "Add";
-  form.reset(); // Always clear form when closing modal
 }
 
 // Save products to localStorage
@@ -60,17 +59,16 @@ function renderProducts() {
   } else {
     products.forEach((p, index) => {
       const row = document.createElement("tr");
-      const { name, code: sku, category, stock, price } = p;
       row.innerHTML = `
-        <td>${name}</td>
-        <td>${sku}</td>
-        <td>${category}</td>
-        <td>${stock}</td>
-        <td>₱${price.toFixed(2)}</td>
-        <td class="${stock === 0 ? 'low-stock' : (stock <= 10 ? 'low-stock' : '')}">${stock === 0 ? "Out of Stock" : (stock <= 10 ? "Low Stock" : "In Stock")}</td>
+        <td>${p.name}</td>
+        <td>${p.code}</td>
+        <td>${p.category}</td>
+        <td>${p.stock}</td>
+        <td>₱${p.price.toFixed(2)}</td>
+        <td class="${p.stock <= 10 ? 'low-stock' : ''}">${p.stock <= 10 ? "Low Stock" : (p.stock > 0 ? "In Stock" : "Out of Stock")}</td>
         <td>
-          <button onclick="editRow(this)">Edit</button>
-          <button onclick="deleteRow(this)">Delete</button>
+          <button onclick="editRow(${index})">Edit</button>
+          <button onclick="deleteRow(${index})">Delete</button>
         </td>
       `;
       tableBody.appendChild(row);
@@ -94,11 +92,11 @@ form.addEventListener("submit", function(e) {
       products[editingRow] = { name, code, category, stock, price };
     } else {
       products.push({ name, code, category, stock, price });
-      form.reset(); // Always reset after adding
     }
 
     saveProducts();
     renderProducts();
+    form.reset();
   } catch (err) {
     console.error("Error submitting product form:", err);
   }
@@ -106,9 +104,7 @@ form.addEventListener("submit", function(e) {
 });
 
 // Edit product
-function editRow(button) {
-  const row = button.closest("tr");
-  const index = Array.from(tableBody.children).indexOf(row);
+function editRow(index) {
   const product = products[index];
   document.getElementById("productName").value = product.name;
   document.getElementById("code").value = product.code;
@@ -202,16 +198,24 @@ function updateStats() {
   products.forEach(p => {
     totalProducts++;
     if (p.stock <= 10) lowStock++;
-    inventoryValue += p.price * p.stock;
+    inventoryValue += p.stock * p.price;
     categories.add(p.category);
   });
 
   document.getElementById("totalProducts").textContent = totalProducts;
   document.getElementById("lowStock").textContent = lowStock;
-  document.getElementById("inventoryValue").textContent = `₱${inventoryValue.toFixed(2)}`;
-  document.getElementById("uniqueCategories").textContent = categories.size;
+  document.getElementById("inventoryValue").textContent = "₱" + inventoryValue.toFixed(2);
+  document.getElementById("categoriesCount").textContent = categories.size;
 }
 
-// Initial render
+// --- Sync with Sales page instantly ---
+window.addEventListener("storage", (event) => {
+  if (event.key === "products") {
+    products = JSON.parse(localStorage.getItem("products")) || [];
+    renderProducts();
+    updateStats(); // refresh stats live
+  }
+});
+
+// Init
 renderProducts();
-updateStats();

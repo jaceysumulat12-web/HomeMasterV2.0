@@ -9,10 +9,12 @@ body {
   height: 100vh;
 }
 
+/* Main container */
 .container {
   text-align: center;
 }
 
+/* Header section */
 .header {
   margin-bottom: 30px;
 }
@@ -36,6 +38,7 @@ h1 {
   margin: 0;
 }
 
+/* Login box */
 .login-box {
   background: #fff;
   padding: 30px;
@@ -67,36 +70,73 @@ input {
   background: #f5f5f7;
 }
 
-.forget {
+.inputbox {
+  position: relative;
+  margin: 20px 0; 
+  max-width: 310px;
+  border-bottom: 2px solid black;
+}
+
+.inputbox label {
+  position: absolute;
+  top: 50%; 
+  left: 5px;
+  transform: translateY(-50%);
+  color: black; 
+  font-size: 1rem;
+  pointer-events: none;
+  transition: all 0.5s ease-in-out;
+}
+
+.inputbox input:focus ~ label,
+.inputbox input:valid ~ label {
+   top: -5px;
+}
+            
+.inputbox .input {
+  width: 100%; 
+  height: 60px;
+  background: transparent;
+  border: none;  
+  outline: none; 
+  font-size: 1rem;
+  padding: 0 35px 0 5px;
+  color: black;
+  appearance: none;
+}
+
+.inputbox input:-webkit-autofill,
+.inputbox input:-webkit-autofill:hover, 
+.inputbox input:-webkit-autofill:focus, 
+.inputbox input:-webkit-autofill:active {
+    background: transparent !important;
+    -webkit-box-shadow: 0 0 0px 1000px transparent inset !important;
+    -webkit-text-fill-color: #fff !important;
+        }
+
+.inputbox ion-icon {
+  position: absolute;
+  right: 8px; 
+  color: black; 
+  font-size: 1.2rem;
+  top: 20px;
+}
+            
+.remember {
   margin: 15px 0;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   color: black;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  align-items: center;   
+  gap: 6px;              
 }
 
-.forget label {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  margin: 0;
+.remember input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
   cursor: pointer;
-}
-
-.forget input[type="checkbox"] {
+  accent-color: #060214;  
   margin: 0;
-  accent-color: #060214;
-}
-
-.forget a {
-  color: black;
-  text-decoration: none;
-  font-weight: 600;
-}
-
-.forget a:hover {
-  text-decoration: underline;
 }
 
 button {
@@ -117,42 +157,16 @@ button:hover {
 .register {
   font-size: 0.9rem;
   color: black;
-  text-align: center;
-  margin: 20px 0 10px;
+  text-align: center; 
+  margin: 25px 0 10px;
 }
 
 .register p a {
   text-decoration: none;
-  color: black;
+  color: black; 
   font-weight: 600;
 }
 
-.register p a:hover {
+.register p a:hover { 
   text-decoration: underline;
 }
-
-#forgotPasswordSection {
-  display: none;
-  text-align: left;
-  margin-top: 10px;
-}
-
-#forgotPasswordSection h2 {
-  text-align: center;
-}
-
-#forgotPasswordSection p {
-  text-align: center;
-  margin-top: 15px;
-}
-
-#backToLogin {
-  color: black;
-  text-decoration: none;
-  font-weight: 600;
-}
-
-#backToLogin:hover {
-  text-decoration: underline;
-}
-

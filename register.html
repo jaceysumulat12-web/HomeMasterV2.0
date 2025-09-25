@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <link rel="stylesheet" href="register.css">
+</head>
+<body>
+    <div class="container">
+    <div class="header">
+      <img src="logo.png" alt="HomeMaster Direct Logo" class="logo">
+      <h1>HomeMaster Direct</h1>
+      <p class="subtitle">Smart Hardware Management System</p>
+    </div>
+
+    <div class="login-box">
+      <h2>Register</h2>
+      <form id="loginForm">
+        <label for="username">Name</label>
+        <input type="text" id="username" placeholder="Enter Name" required>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="Enter Email" required>
+
+        <label for="position">Position</label>
+        <input type="text" id="position" placeholder="Enter Position" required>
+
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter Password" required>
+   
+        <div class="remember">
+        <label><input type="checkbox" id="rememberMe"> Remember me</label>
+        </div>
+
+        <button type="button" onclick="window.location.href='dashboard.html'">Register</button>
+
+            <div class="register">
+                <p>Already have an account? <a href="index.html">Login</a></p>
+            </div>
+    </div>
+  </div>
+          <script src="register.js"></script>
+</body>
+</html>

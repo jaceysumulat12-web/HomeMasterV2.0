@@ -8,16 +8,13 @@
 </head>
 <body>
   <div class="container">
-    <!-- Logo and Title -->
     <div class="header">
       <img src="logo.png" alt="HomeMaster Direct Logo" class="logo">
       <h1>HomeMaster Direct</h1>
       <p class="subtitle">Smart Hardware Management System</p>
     </div>
 
-    <!-- Login Box -->
     <div class="login-box">
-      <!-- Login Section -->
       <div id="loginSection">
         <h2>Sign In</h2>
         <form id="loginForm">
@@ -28,13 +25,10 @@
           <input type="password" id="password" placeholder="Enter Password" required>
 
           <div class="forget">
-            <div class="forget-row">
-              <div class="checkbox-remember">
-                <input type="checkbox" id="rememberMe">
-                <span>Remember</span>
-              </div>
-              <a href="#" id="forgotPasswordLink">Forgot Password?</a>
-            </div>
+            <label for="rememberMe">
+              <input type="checkbox" id="rememberMe"> Remember
+            </label>
+            <a href="#" id="forgotPasswordLink">Forgot Password?</a>
           </div>
 
           <button type="submit">Sign In</button>
@@ -45,7 +39,6 @@
         </div>
       </div>
 
-      <!-- Forgot Password Section -->
       <div id="forgotPasswordSection" style="display: none;">
         <h2>Reset Password</h2>
         <label for="resetUsername">Username or Email</label>
@@ -54,8 +47,8 @@
         <label for="newPassword">New Password</label>
         <input type="password" id="newPassword" placeholder="Enter new password" required>
 
-  <button id="resetPasswordBtn" class="btn-reset">Reset Password</button>
-  <p><a href="#" id="backToLogin" class="btn-link">Back to Login</a></p>
+        <button id="resetPasswordBtn">Reset Password</button>
+        <p><a href="#" id="backToLogin">Back to Login</a></p>
       </div>
     </div>
   </div>

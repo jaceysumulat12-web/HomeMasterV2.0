@@ -1,66 +1,73 @@
-// --- Login handling ---
-document.getElementById("loginForm").addEventListener("submit", function(e) {
-  e.preventDefault();
+localStorage.setItem("user", JSON.stringify({
+  username: "admin",
+  password: "admin123"
+}));
 
-  const username = document.getElementById("username").value;
-  const password = document.getElementById("password").value;
-  const rememberMe = document.getElementById("rememberMe").checked;
+document.addEventListener('DOMContentLoaded', () => {
+  const loginForm = document.getElementById("loginForm");
+  const usernameInput = document.getElementById("username");
+  const passwordInput = document.getElementById("password");
+  const rememberCheckbox = document.getElementById("rememberMe");
 
-  // --- Remember Me ---
-  if (rememberMe) {
-    localStorage.setItem("rememberedUser", username);
-  } else {
-    localStorage.removeItem("rememberedUser");
+  const rememberedUsername = localStorage.getItem("rememberedUsername");
+  if (rememberedUsername) {
+    usernameInput.value = rememberedUsername;
+    rememberCheckbox.checked = true;
   }
 
-  // Demo login check (replace with backend later)
-  const savedPassword = localStorage.getItem("userPassword_" + username);
-  if ((savedPassword && password === savedPassword) || (username === "admin" && password === "admin123" && !savedPassword)) {
-    alert("Login successful!");
-    window.location.href = "dashboard.html";
-  } else {
-    alert("Invalid username or password");
-  }
-});
+  loginForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value.trim();
+    const user = JSON.parse(localStorage.getItem("user"));
 
-// --- Autofill Remembered User ---
-window.addEventListener("load", () => {
-  const rememberedUser = localStorage.getItem("rememberedUser");
-  if (rememberedUser) {
-    document.getElementById("username").value = rememberedUser;
-    document.getElementById("rememberMe").checked = true;
-  }
-});
+    console.log("Stored user:", user);
+    console.log("Input username:", username, "Input password:", password);
 
-// --- Forgot password toggle ---
-const forgotPasswordLink = document.getElementById("forgotPasswordLink");
-const backToLoginLink = document.getElementById("backToLogin");
-const loginSection = document.getElementById("loginSection");
-const forgotSection = document.getElementById("forgotPasswordSection");
+    if (username === user.username && password === user.password) {
+      if (rememberCheckbox.checked) {
+        localStorage.setItem("rememberedUsername", username);
+      } else {
+        localStorage.removeItem("rememberedUsername");
+      }
+      alert("Login successful!");
+      window.location.href = "dashboard.html";
+    } else {
+      alert("Invalid username or password");
+    }
+  });
 
-forgotPasswordLink.addEventListener("click", function(e) {
-  e.preventDefault();
-  loginSection.style.display = "none";
-  forgotSection.style.display = "block";
-});
+  document.getElementById("forgotPasswordLink").addEventListener("click", function (e) {
+    e.preventDefault();
+    document.getElementById("loginSection").style.display = "none";
+    document.getElementById("forgotPasswordSection").style.display = "block";
+  });
 
-backToLoginLink.addEventListener("click", function(e) {
-  e.preventDefault();
-  forgotSection.style.display = "none";
-  loginSection.style.display = "block";
-});
+  document.getElementById("backToLogin").addEventListener("click", function (e) {
+    e.preventDefault();
+    document.getElementById("forgotPasswordSection").style.display = "none";
+    document.getElementById("loginSection").style.display = "block";
+  });
 
-// --- Reset password demo ---
-document.getElementById("resetPasswordBtn").addEventListener("click", function() {
-  const resetUser = document.getElementById("resetUsername").value;
-  const newPass = document.getElementById("newPassword").value;
+  document.getElementById("resetPasswordBtn").addEventListener("click", function () {
+    const resetUsername = document.getElementById("resetUsername").value.trim();
+    const newPassword = document.getElementById("newPassword").value.trim();
+    const user = JSON.parse(localStorage.getItem("user"));
 
-  if (resetUser && newPass) {
-    localStorage.setItem("userPassword_" + resetUser, newPass);
-    alert("Password reset successful for: " + resetUser);
-    forgotSection.style.display = "none";
-    loginSection.style.display = "block";
-  } else {
-    alert("Please fill in all fields");
-  }
+    if (resetUsername === user.username) {
+      if (newPassword.length < 4) {
+        alert("Password must be at least 4 characters.");
+        return;
+      }
+
+      user.password = newPassword;
+      localStorage.setItem("user", JSON.stringify(user));
+
+      alert("Password successfully reset!");
+      document.getElementById("forgotPasswordSection").style.display = "none";
+      document.getElementById("loginSection").style.display = "block";
+    } else {
+      alert("No account found with that username/email.");
+    }
+  });
 });
