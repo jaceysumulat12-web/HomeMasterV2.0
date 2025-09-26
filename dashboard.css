@@ -159,7 +159,6 @@ button:hover {
 
 .search-bar input {
   flex: 1;
-  width: 1560px;
   padding: 10px;
   border-radius: 6px;
   border: 1px solid #ddd;

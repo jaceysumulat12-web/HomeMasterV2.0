@@ -7,6 +7,7 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  background-image: linear-gradient(to right, #000000, #ffffff);
 }
 
 .container {
@@ -22,7 +23,7 @@ body {
   height: 70px;
   border-radius: 12px;
   margin-bottom: 10px;
-  background-color: #060214;
+  background-color: #000000;
 }
 
 h1 {
@@ -32,7 +33,7 @@ h1 {
 
 .subtitle {
   font-size: 14px;
-  color: #666;
+  color: #000000;
   margin: 0;
 }
 
