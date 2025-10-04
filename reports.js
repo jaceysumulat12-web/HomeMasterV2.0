@@ -136,7 +136,7 @@ function printReceipt(idx) {
       </table>
 
       <div class="footer">
-        <p>Thank you for your purchase!<br>Powered by Smart Hardware Management System</p>
+        <p>Thank you for your purchase!<br>Powered by HomeMaster Direct</p>
       </div>
     </body>
     </html>
