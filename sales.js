@@ -22,15 +22,15 @@ function renderProducts(filter = "") {
     return;
   }
 
-  filtered.forEach(p => {
+    filtered.forEach(p => {
     const div = document.createElement("div");
     div.classList.add("product-item");
     div.innerHTML = `
       <div>
         <strong>${p.name}</strong><br>
-        <small>${p.code} - Stock: ${p.stock}</small>
+                <small>${p.code}${p.unitAmount ? ' ' + p.unitAmount : ''}${p.unit ? ' · ' + p.unit : ''} - Stock: ${p.stock}</small>
       </div>
-      <span>₱${p.price.toFixed(2)}</span>
+  <span>₱${p.price.toFixed(2)}</span>
     `;
     div.onclick = () => addToCart(p);
     list.appendChild(div);
@@ -61,14 +61,15 @@ function renderCart() {
     cartDiv.textContent = "Cart is empty";
     document.getElementById("checkoutBtn").disabled = true;
   } else {
-    cart.forEach((item, index) => {
+      cart.forEach((item, index) => {
       const div = document.createElement("div");
       div.classList.add("cart-item");
       div.innerHTML = `
         <span>${item.name}</span>
         <div>
           <button onclick="decreaseQty(${index})">-</button>
-          <span> ${item.qty} </span>
+          <span> ${item.qty} ${item.unit ? item.unit : ''} </span>
+                 
           <button onclick="increaseQty(${index})">+</button>
           <span>₱${(item.qty * item.price).toFixed(2)}</span>
           <button onclick="removeFromCart(${index})">x</button>
@@ -138,6 +139,7 @@ function printReceipt(sale) {
         <thead>
           <tr>
             <th>Product</th>
+            <th>Specifications</th>
             <th>Qty</th>
             <th>Price</th>
             <th>Total</th>
@@ -146,7 +148,8 @@ function printReceipt(sale) {
         <tbody>
           ${sale.items.map(i => `
             <tr>
-              <td>${i.name}</td>
+                <td>${i.name}</td>
+                <td>${i.unitAmount ? i.unitAmount + ' ' : ''}${i.unit ? i.unit : ''}</td>
               <td>${i.qty}</td>
               <td>₱${i.price.toFixed(2)}</td>
               <td>₱${i.total.toFixed(2)}</td>
@@ -186,6 +189,8 @@ function checkout() {
     items: cart.map(item => ({
       name: item.name,
       code: item.code,
+    unit: item.unit,
+      unitAmount: item.unitAmount,
       qty: item.qty,
       price: item.price,
       total: item.qty * item.price

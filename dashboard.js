@@ -55,16 +55,22 @@ function saveProducts() {
 function renderProducts() {
   tableBody.innerHTML = "";
   if (products.length === 0) {
-    tableBody.innerHTML = `<tr><td colspan="7" class="empty">No products found.</td></tr>`;
-  } else {
-    products.forEach((p, index) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = '<td colspan="8" class="empty">No products found.</td>';
+    tableBody.appendChild(tr);
+    updateStats();
+    return;
+  }
+
+  products.forEach((p, index) => {
       const row = document.createElement("tr");
       row.innerHTML = `
-        <td>${p.name}</td>
-        <td>${p.code}</td>
-        <td>${p.category}</td>
-        <td>${p.stock}</td>
-        <td>₱${p.price.toFixed(2)}</td>
+    <td>${p.name}</td>
+    <td>${p.code}</td>
+  <td>${p.unitAmount ? p.unitAmount + ' ' : ''}${p.unit ? p.unit : ''}</td>
+  <td>${p.category}</td>
+  <td>${p.stock}</td>
+    <td>₱${p.price.toFixed(2)}</td>
         <td class="${p.stock <= 10 ? 'low-stock' : ''}">${p.stock <= 10 ? "Low Stock" : (p.stock > 0 ? "In Stock" : "Out of Stock")}</td>
         <td>
           <button onclick="editRow(${index})">Edit</button>
@@ -73,7 +79,8 @@ function renderProducts() {
       `;
       tableBody.appendChild(row);
     });
-  }
+
+  filterProducts();
   updateStats();
 }
 
@@ -82,16 +89,19 @@ form.addEventListener("submit", function(e) {
   e.preventDefault();
 
   try {
-    const name = document.getElementById("productName").value;
-    const code = document.getElementById("code").value;
-    const category = document.getElementById("category").value;
-    const stock = parseInt(document.getElementById("stock").value);
-    const price = parseFloat(document.getElementById("price").value);
+  const name = document.getElementById("productName").value;
+  const code = document.getElementById("code").value;
+  const category = document.getElementById("category").value;
+  const unit = document.getElementById("unit").value;
+  const unitAmount = document.getElementById("unitAmount").value ? parseFloat(document.getElementById("unitAmount").value) : null;
+
+  const stock = parseInt(document.getElementById("stock").value);
+  const price = parseFloat(document.getElementById("price").value);
 
     if (isEditing && editingRow !== null) {
-      products[editingRow] = { name, code, category, stock, price };
+      products[editingRow] = { name, code, category, unit, unitAmount, stock, price };
     } else {
-      products.push({ name, code, category, stock, price });
+      products.push({ name, code, category, unit, unitAmount, stock, price });
     }
 
     saveProducts();
@@ -109,6 +119,8 @@ function editRow(index) {
   document.getElementById("productName").value = product.name;
   document.getElementById("code").value = product.code;
   document.getElementById("category").value = product.category;
+  document.getElementById("unit").value = product.unit || "";
+  document.getElementById("unitAmount").value = product.unitAmount || "";
   document.getElementById("stock").value = product.stock;
   document.getElementById("price").value = product.price;
   openModal(true, index);
@@ -126,9 +138,9 @@ function filterProducts() {
   const filterValue = categoryFilter.value;
   const rows = tableBody.querySelectorAll("tr");
   let anyVisible = false;
-  rows.forEach(row => {
+    rows.forEach(row => {
     if (row.classList.contains("empty")) return;
-    const cat = row.cells[2].textContent;
+    const cat = row.cells[3].textContent;
     if (!filterValue || cat === filterValue) {
       row.style.display = "";
       anyVisible = true;
@@ -145,7 +157,7 @@ function filterProducts() {
   const visibleRows = Array.from(tableBody.querySelectorAll("tr")).filter(row => !row.classList.contains("empty") && row.style.display !== "none");
   if (visibleRows.length === 0) {
     const tr = document.createElement("tr");
-    tr.innerHTML = '<td colspan="7" class="empty">No products found.</td>';
+    tr.innerHTML = '<td colspan="8" class="empty">No products found.</td>';
     tableBody.appendChild(tr);
   }
 }
@@ -168,10 +180,10 @@ function searchProducts() {
   const rows = tableBody.querySelectorAll("tr");
   let anyVisible = false;
   rows.forEach(row => {
-    if (row.classList.contains("empty")) return;
-    const name = row.cells[0].textContent.toLowerCase();
-    const code = row.cells[1].textContent.toLowerCase();
-    const category = row.cells[2].textContent.toLowerCase();
+  if (row.classList.contains("empty")) return;
+  const name = row.cells[0].textContent.toLowerCase();
+  const code = row.cells[1].textContent.toLowerCase();
+  const category = row.cells[3].textContent.toLowerCase();
     if (!query || name.includes(query) || code.includes(query) || category.includes(query)) {
       row.style.display = "";
       anyVisible = true;
@@ -183,10 +195,15 @@ function searchProducts() {
   if (anyVisible) {
     if (emptyRow) emptyRow.remove();
   } else {
-    if (!emptyRow) {
-      const tr = document.createElement("tr");
-      tr.innerHTML = '<td colspan="7" class="empty">No products found.</td>';
-      tableBody.appendChild(tr);
+    const activeCategory = categoryFilter ? categoryFilter.value : "";
+    if (activeCategory) {
+      if (!emptyRow) {
+        const tr = document.createElement("tr");
+        tr.innerHTML = '<td colspan="8" class="empty">No products found.</td>';
+        tableBody.appendChild(tr);
+      }
+    } else {
+      if (emptyRow) emptyRow.remove();
     }
   }
 }

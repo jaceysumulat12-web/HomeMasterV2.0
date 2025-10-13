@@ -51,24 +51,26 @@ function renderReports(filter = "all") {
         <td colspan="7">
           <table class="inner-table">
             <thead>
-              <tr>
-                <th>Product</th>
-                <th>Code</th>
-                <th>Qty</th>
-                <th>Price</th>
-                <th>Total</th>
-              </tr>
+          <tr>
+          <th>Product</th>
+          <th>Code</th>
+          <th>Specifications</th>
+          <th>Qty</th>
+          <th>Price</th>
+          <th>Total</th>
+        </tr>
             </thead>
             <tbody>
-              ${sale.items.map(i => `
-                <tr>
-                  <td>${i.name}</td>
-                  <td>${i.code}</td>
-                  <td>${i.qty}</td>
-                  <td>₱${i.price.toFixed(2)}</td>
-                  <td>₱${i.total.toFixed(2)}</td>
-                </tr>
-              `).join("")}
+                ${sale.items.map(i => `
+                  <tr>
+                    <td>${i.name}</td>
+                    <td>${i.code}</td>
+                    <td>${i.unitAmount ? i.unitAmount + ' ' : ''}${i.unit ? i.unit : ''}</td>
+                    <td>${i.qty}</td>
+                    <td>₱${i.price.toFixed(2)}</td>
+                    <td>₱${i.total.toFixed(2)}</td>
+                  </tr>
+                `).join("")}
             </tbody>
           </table>
         </td>
@@ -155,11 +157,10 @@ function downloadReport() {
     return;
   }
 
-  let csv = "Sale ID,Date,Customer,Product,Code,Qty,Price,Total,Sale Total,Payment,Cashier\n";
-
+  let csv = "Sale ID,Date,Customer,Product,Code,SpecificationAmount,Specification,Qty,Price,Total,Sale Total,Payment,Cashier\n";
   salesReports.forEach(sale => {
     sale.items.forEach(item => {
-      csv += `${sale.id},${sale.date},${sale.customer},${item.name},${item.code},${item.qty},${item.price},${item.total},${sale.total},${sale.payment},${sale.cashier}\n`;
+  csv += `${sale.id},${sale.date},${sale.customer},${item.name},${item.code},${item.unitAmount || ''},${item.unit || ''},${item.qty},${item.price},${item.total},${sale.total},${sale.payment},${sale.cashier}\n`;
     });
   });
 
